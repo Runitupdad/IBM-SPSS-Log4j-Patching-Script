@@ -1,1 +1,0 @@
-xcopy "%~dp0*.*" "C:\temp" /E /C /I /Q /H /R /Y /S
