@@ -1,6 +1,20 @@
-#need to add logging features to this so we know if it failed and where.
+#Bob Perini#
+#11/9/26#
 
-#determine old version programatically
+#Readme:
+#This is a method to patch ibm spss log4j issues (which it uses in it's directories)
+
+#SPSS patch notifications seem be behind a login, so just watch the log4j website for changes of whatever is the latest stable verison.
+#Adjust $newversion as required
+#Step 1, create a package or application in Configuration Manager or a MDM of your choice. The files 
+#inside are just (log4j-core-version.jar, log4j-1.2-api-version.jar, log4j-api-version.jar)
+#Step 2, copy these files to c:\temp (might be same as step 1 depending on your Management Tool)
+#Step 3, Run this powershell script as admin. (I use a task sequence, but it can be done manually)
+
+#need to add logging features.
+
+#determine old version programatically based on what is in the folder, there will always be this file in the main 
+#spss directory
 $oldfile=Get-ChildItem -Path "C:\program files\ibm\SPSS Statistics\" -Filter "*log4j-core*" -File | Sort-Object Name
 $oldfilearray = $oldfile[0] -split "-"
 $oldversion=$oldfilearray[2] -split ".jar"
@@ -25,7 +39,6 @@ $oldlog4japiJar1 = "log4j-1.2-api-$oldversion.jar"
 $oldlog4japiJar2= "log4j-api-$oldversion.jar"
 
 # Copy Log4j Core
-#Write-Host "Copying Log4j Core..."
 #root spss folder
 Copy-Item -Path $log4jCoreJar -Destination $spsslibpath -Force
 Copy-Item -Path $log4japiJar1 -Destination $spssLibPath -Force
@@ -36,7 +49,6 @@ Copy-Item -Path $log4japiJar1  -Destination $spssLibPath2 -Force
 Copy-Item -Path $log4japijar2 -Destination $spssLibPath2 -Force
 
 #remove old files
-#write-host $spssLibPath$oldlog4jCoreJar
 
 #root spss folder
 remove-Item $spsslibpath$oldlog4jCoreJar -Force 
